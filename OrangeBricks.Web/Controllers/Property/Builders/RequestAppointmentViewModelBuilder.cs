@@ -1,28 +1,29 @@
+using System;
 using OrangeBricks.Web.Controllers.Property.ViewModels;
 using OrangeBricks.Web.Models;
 
 namespace OrangeBricks.Web.Controllers.Property.Builders
 {
-    public class MakeOfferViewModelBuilder
+    public class RequestAppointmentViewModelBuilder
     {
         private readonly IOrangeBricksContext _context;
 
-        public MakeOfferViewModelBuilder(IOrangeBricksContext context)
+        public RequestAppointmentViewModelBuilder(IOrangeBricksContext context)
         {
             _context = context;
         }
 
-        public MakeOfferViewModel Build(int id,string userId)
+        public RequestAppointmentViewModel Build(int id,string userId)
         {
             var property = _context.Properties.Find(id);
 
-            return new MakeOfferViewModel
+            var retModel = new RequestAppointmentViewModel
             {
                 PropertyId = property.Id,
                 PropertyType = property.PropertyType,
-                StreetName = property.StreetName,             
-                Offer = 100000 // TODO: property.SuggestedAskingPrice
+                StreetName = property.StreetName                
             };
+            return retModel;
         }
     }
 }

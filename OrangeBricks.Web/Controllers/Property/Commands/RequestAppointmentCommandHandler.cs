@@ -5,35 +5,33 @@ using Microsoft.AspNet.Identity;
 
 namespace OrangeBricks.Web.Controllers.Property.Commands
 {
-    public class MakeOfferCommandHandler
+    public class RequestAppointmentCommandHandler
     {
         private readonly IOrangeBricksContext _context;
 
-        public MakeOfferCommandHandler(IOrangeBricksContext context)
+        public RequestAppointmentCommandHandler(IOrangeBricksContext context)
         {
             _context = context;
         }
 
-        public void Handle(MakeOfferCommand command)
+        public void Handle(RequestAppointmentCommand command)
         {
             var property = _context.Properties.Find(command.PropertyId);
 
-            var offer = new Offer
+            var appt = new Appointment
             {
-                Amount = command.Offer,
-                Status = OfferStatus.Pending,
+                Date = System.DateTime.Parse(command.AppointmentDate + " " + command.AppointmentTime),
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 BuyerUserId = command.BuyerUserId
             };
 
-            if (property.Offers == null)
+            if (property.Appointments == null)
             {
-                property.Offers = new List<Offer>();
+                property.Appointments = new List<Appointment>();
             }
-                
-            property.Offers.Add(offer);
             
+            property.Appointments.Add(appt);  
             _context.SaveChanges();
         }
     }

@@ -1,0 +1,53 @@
+﻿@using OrangeBricks.Web.Models
+@model OrangeBricks.Web.Controllers.Appointments.ViewModels.AppointmentsViewModel
+@{
+    ViewBag.Title = "Appointments Requested on Property";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@ViewBag.Title</h2>
+@if (Model.Appointments.Any())
+{
+<p>Here you can see the appoinments that have been requested to view your property.</p>
+<p><strong>Property type:</strong> @Model.Property.PropertyType</p>
+<p><strong>Number of bedrooms:</strong> @Model.Property.NumberOfBedrooms</p>
+<p><strong>Street name:</strong> @Model.Property.StreetName</p>
+<p>You have @Model.Appointments.Count() appointment request(s) on this property...</p>
+
+    foreach (var appointment in Model.Appointments)
+    {
+        <hr />
+        <div>
+            <p><strong>Appointment Date/Time: </strong> @appointment.Date.ToLongTimeString() on @appointment.Date.ToShortDateString()</p>
+            <p><strong>Requested At: </strong> @appointment.CreatedAt.ToLongTimeString() on @appointment.CreatedAt.ToShortDateString()</p>
+            <p><strong>Status: </strong> @appointment.Status</p>
+        </div>
+
+        if (appointment.IsPending)
+        {
+            using (Html.BeginForm("Accept", "Appointments"))
+            {
+                @Html.Hidden("AppointmentId", appointment.Id)
+                @Html.Hidden("PropertyId", Model.Property.Id)
+                <p>
+                    <input type="submit" class="btn btn-default" value="Accept" />
+                </p>
+            }
+            using (Html.BeginForm("Reject", "Appointments"))
+            {
+
+                @Html.Hidden("AppointmentId", appointment.Id)
+                @Html.Hidden("PropertyId", Model.Property.Id)
+                <p>
+                    <input type="submit" class="btn btn-default" value="Reject" />
+                </p>
+            }
+        }
+
+    }
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        This property has no appointment requests!
+    </div>
+}

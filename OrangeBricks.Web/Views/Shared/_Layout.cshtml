@@ -7,6 +7,11 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
+    <style type="text/css">
+        .date {
+            width: 100% 
+        }
+    </style>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -29,6 +34,11 @@
                         {
                             <li>@Html.ActionLink("Create Listing", "Create", "Property")</li>
                             <li>@Html.ActionLink("My Properties", "MyProperties", "Property")</li>
+                        }
+                        else//buyer
+                        {
+                            <li>@Html.ActionLink("My Offers", "MyOffers", "Offers")</li>
+                            <li>@Html.ActionLink("My Appointments", "MyAppointments", "Appointments")</li>
                         }
                     }
                 </ul>

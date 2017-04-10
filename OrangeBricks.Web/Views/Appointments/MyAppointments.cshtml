@@ -1,0 +1,35 @@
+﻿@model OrangeBricks.Web.Controllers.Appointments.ViewModels.MyAppointmentsViewModel
+@{
+    ViewBag.Title = "My Offers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+<p>Here you can see the appointments you have requested to view  properties.</p>
+@if (Model.MyAppointments.Any())
+{
+    <p>You have made @Model.MyAppointments.Count() offer(s) ...</p>
+
+    foreach (var appointment in Model.MyAppointments)
+    {
+        <hr />
+        <div>
+            <p><strong>Property Information: </strong>
+            <p><strong>Property Type: </strong> @appointment.Property.PropertyType</p>
+            <p><strong>Number of Bedrooms: </strong> @appointment.Property.NumberOfBedrooms</p>
+            <p><strong>Street Name: </strong> @appointment.Property.StreetName</p>
+
+            <p><strong>Date: </strong> @appointment.Appointment.Date.ToLongTimeString() on @appointment.Appointment.Date.ToShortDateString()</p>
+            <p><strong>Appointment Requested: </strong> @appointment.Appointment.Date.ToLongTimeString() on @appointment.Appointment.Date.ToShortDateString()</p>
+            <p><strong>Status: </strong> @appointment.Appointment.Status</p>
+        </div>
+
+    }
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        You haven't requested any appointments!
+    </div>
+}
+

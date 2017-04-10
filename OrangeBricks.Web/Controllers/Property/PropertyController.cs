@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
@@ -77,7 +79,7 @@ namespace OrangeBricks.Web.Controllers.Property
         public ActionResult MakeOffer(int id)
         {
             var builder = new MakeOfferViewModelBuilder(_context);
-            var viewModel = builder.Build(id);
+            var viewModel = builder.Build(id, User.Identity.GetUserId());
             return View(viewModel);
         }
 
@@ -85,7 +87,31 @@ namespace OrangeBricks.Web.Controllers.Property
         [OrangeBricksAuthorize(Roles = "Buyer")]
         public ActionResult MakeOffer(MakeOfferCommand command)
         {
+            //todo: come up with more elegant way of handling this
+            command.BuyerUserId = User.Identity.GetUserId();
             var handler = new MakeOfferCommandHandler(_context);
+
+            handler.Handle(command);
+
+            return RedirectToAction("Index");
+        }
+
+        [OrangeBricksAuthorize(Roles = "Buyer")]
+        public ActionResult RequestAppointment(int id)
+        {
+            var builder = new RequestAppointmentViewModelBuilder(_context);
+            var viewModel = builder.Build(id, User.Identity.GetUserId());
+            return View(viewModel);
+        }
+
+
+        [HttpPost]
+        [OrangeBricksAuthorize(Roles = "Buyer")]
+        public ActionResult RequestAppointment(RequestAppointmentCommand command)
+        {
+            //todo: come up with more elegant way of handling this
+            command.BuyerUserId = User.Identity.GetUserId();
+            var handler = new RequestAppointmentCommandHandler(_context);
 
             handler.Handle(command);
 
